@@ -141,3 +141,8 @@ LOGGING['formatters']['verbose'] = {
     'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
     'datefmt': "%d/%b/%Y %H:%M:%S"
 }
+
+PAYMENT_PROCESSORS = [
+    # (processor.path, setup.data)
+    ('silver.models.payment_processors.manual.ManualProcessor', {}),
+]
