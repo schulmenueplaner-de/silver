@@ -1,0 +1,14 @@
+{% extends 'forms/transaction_form.html' %}
+
+{% block payment_processor %}
+{% endblock %}
+
+{% block form %}
+    {{ block.super }}
+    {{ form }}
+{% endblock %}
+
+{% block transaction %}
+    {{ block.super }}
+    {{ payment_method.data.details }}
+{% endblock %}
