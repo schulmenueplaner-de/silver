@@ -23,3 +23,5 @@ html5lib==0.999
 django-multi-email-field==0.4
 braintree==3.32.0
 cryptography==1.7.1
+
+git+https://github.com/Presslabs/django-payu.git@master#egg=payu

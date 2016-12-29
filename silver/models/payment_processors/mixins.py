@@ -59,5 +59,3 @@ class AutomaticProcessorMixin(BaseActionableProcessor):
 
 class TriggeredProcessorMixin(BaseActionableProcessor):
     type = PaymentProcessorTypes.Triggered
-
-
