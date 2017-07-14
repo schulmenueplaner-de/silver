@@ -23,6 +23,7 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from silver.retry_patterns import RetryPatterns
 from .base import BaseBillingEntity
 
 
@@ -81,6 +82,10 @@ class Provider(BaseBillingEntity):
         default=DOCUMENT_DEFAULT_STATE.draft,
         help_text="The default state of the auto-generated documents."
     )
+
+    transaction_maximum_automatic_retries = models.PositiveIntegerField(default=5)
+    transaction_retry_pattern = models.CharField(choices=RetryPatterns.as_choices(), max_length=16,
+                                                 default=RetryPatterns.as_choices()[0][0])
 
     def __init__(self, *args, **kwargs):
         super(Provider, self).__init__(*args, **kwargs)

@@ -1,12 +1,17 @@
+import logging
 from itertools import chain
 
 from celery import group
 from django.conf import settings
+from django.db.models import Q
 from redis.exceptions import LockError
 
-from silver.models import Invoice, Proforma
+from silver.models import Invoice, Proforma, Transaction, PaymentMethod
 from silver.vendors.celery_app import task
 from silver.vendors.redis_server import redis
+
+
+logger = logging.getLogger(__name__)
 
 
 @task()
@@ -40,3 +45,24 @@ def generate_pdfs():
         lock.release()
     except LockError:
         pass
+
+
+@task()
+def retry_transactions():
+    for transaction in Transaction.objects.filter(Q(invoice__state=Invoice.STATES.ISSUED) |
+                                                  Q(proforma__state=Proforma.STATES.ISSUED),
+                                                  state=Transaction.States.Failed,
+                                                  retried_by=None):
+        if not transaction.should_be_retried:
+            continue
+
+        for payment_method in PaymentMethod.objects.filter(customer=transaction.customer,
+                                                           verified=True, canceled=False):
+            try:
+                transaction.retry(payment_method=payment_method)
+                break
+            except Exception:
+                logger.exception('[Tasks][Transaction]: %s', {
+                    'detail': 'There was an error while retrying the transaction.',
+                    'transaction_id': transaction.id
+                })
