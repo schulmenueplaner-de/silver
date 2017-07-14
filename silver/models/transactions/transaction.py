@@ -306,7 +306,7 @@ class Transaction(models.Model):
 
             if self.amount:
                 if self.amount > self.document.amount_to_be_charged_in_transaction_currency:
-                    message = "Amount is greater than the amount that should be charged in order " \
+                    message = "Amount is greater than what should be charged in order " \
                               "to pay the billing document."
                     raise ValidationError(message)
             else:

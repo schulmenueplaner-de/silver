@@ -172,7 +172,7 @@ class InvoiceFactory(factory.django.DjangoModelFactory):
     transaction_xe_rate = Decimal(1)
     state = Invoice.STATES.DRAFT
     issue_date = factory.LazyAttribute(
-        lambda invoice: timezone.now().date() if invoice.state == Invoice.STATES.ISSUED else None
+        lambda invoice: timezone.now().date() if invoice.state != Invoice.STATES.DRAFT else None
     )
 
     @factory.post_generation
