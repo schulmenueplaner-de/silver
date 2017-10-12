@@ -22,8 +22,8 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 from silver.models import Transaction, Invoice, BillingLog
-from silver.tests.factories import (ProviderFactory, CustomerFactory, PlanFactory, SubscriptionFactory,
-                                    MeteredFeatureFactory, TransactionFactory)
+from silver.tests.factories import (ProviderFactory, CustomerFactory, PlanFactory,
+                                    SubscriptionFactory, MeteredFeatureFactory, TransactionFactory)
 import random
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,8 @@ class Command(BaseCommand):
         customer_names = []
         currency = ['USD', 'RON']
 
-        provider = ProviderFactory.create(company='Presslabs', name='Presslabs', flow='invoice', default_document_state='issued')
+        provider = ProviderFactory.create(company='Presslabs', name='Presslabs', flow='invoice',
+                                          default_document_state='issued')
         for i in range(5):
             customer_names.append(CustomerFactory.create())
 
